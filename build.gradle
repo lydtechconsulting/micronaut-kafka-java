@@ -1,0 +1,98 @@
+plugins {
+    id("io.micronaut.application") version "4.3.2"
+    id("io.micronaut.aot") version "4.3.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("application")
+    id("org.graalvm.buildtools.native") version "0.10.1"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
+
+    compileOnly("org.projectlombok:lombok:1.18.30")
+
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
+
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testImplementation("org.hamcrest:hamcrest:2.2")
+    testImplementation("org.mockito:mockito-core:2.1.0")
+    testImplementation("dev.lydtech:component-test-framework:2.11.0")
+    testImplementation("io.rest-assured:rest-assured:5.4.0")
+    testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation("org.apache.kafka:kafka-clients:3.7.0:test")
+    testImplementation("org.apache.kafka:kafka_2.12:3.7.0")
+    testImplementation("org.apache.kafka:kafka_2.12:3.7.0:test")
+}
+
+
+application {
+    mainClass.set("demo.DemoApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
+}
+
+graalvmNative {
+    toolchainDetection = false
+    binaries {
+        main {
+            imageName.set('demo-graalvm-application')
+            mainClass = 'demo.DemoApplication'
+            buildArgs.add('--verbose')
+        }
+    }
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+}
+
+tasks {
+    dockerfileNative {
+        baseImage('ghcr.io/graalvm/native-image-community:21')
+        jdkVersion.set('21')
+    }
+    dockerBuildNative {
+        images = ["ct/micronaut-kafka-java"]
+    }
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime('junit5')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    include '**/*Test.*'
+}
+
+tasks.register('componentTest', Test) {
+    useJUnitPlatform()
+    include '**/*CT.*'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    systemProperties = System.properties
+    environment "TESTCONTAINERS_REUSE_ENABLE", System.getProperty('containers.stayup')
+}
