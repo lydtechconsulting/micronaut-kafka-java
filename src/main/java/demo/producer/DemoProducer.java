@@ -1,5 +1,6 @@
 package demo.producer;
 
+import demo.event.DemoOutboundEvent;
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import io.micronaut.configuration.kafka.annotation.Topic;
 
@@ -7,5 +8,5 @@ import io.micronaut.configuration.kafka.annotation.Topic;
 public interface DemoProducer {
 
     @Topic("demo-outbound-topic")
-    void sendOutbound(String payload);
+    void sendOutbound(DemoOutboundEvent demoOutboundEvent);
 }

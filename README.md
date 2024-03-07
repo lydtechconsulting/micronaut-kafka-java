@@ -25,9 +25,33 @@ Check application health:
 curl localhost:9001/health
 ```
 
+Jump onto the Kafka docker container and produce a demo-inbound message:
+```
+docker exec -ti kafka kafka-console-producer \
+--topic demo-inbound-topic \
+--broker-list kafka:29092
+```
+Now enter the message:
+```
+{"id": "2c48eabf-35b0-4f43-8ff4-d123471ecdfb", "data": "my-data"}
+```
+The demo-inbound message is consumed by the application, which emits a resulting demo-outbound message.
+
+Check for the emitted demo-outbound message:
+```
+docker exec -ti kafka kafka-console-consumer \
+--topic demo-outbound-topic \
+--bootstrap-server kafka:29092 \
+--from-beginning
+```
+Output:
+```
+{"id":"368df778-473b-461c-9cc0-943f18c7b07e","data":"Processed data: my-data"}
+```
+
 ## Component Tests
 
-The component tests bring up the application, Kafka and Zookeeper in docker containers.
+The tests demonstrate sending events to a dockerised Kafka that are consumed by the dockerised application, resulting in outbound events being published.
 
 For more on the component tests see: https://github.com/lydtechconsulting/component-test-framework
 

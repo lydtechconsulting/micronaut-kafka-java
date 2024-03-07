@@ -18,7 +18,7 @@ public class DemoService {
 
     public void process(DemoInboundEvent demoInboundEvent) {
         DemoOutboundEvent demoOutboundEvent = new DemoOutboundEvent(randomUUID().toString(), "Processed data: "+demoInboundEvent.data());
-        demoProducer.sendOutbound(demoOutboundEvent.data());
+        demoProducer.sendOutbound(demoOutboundEvent);
         log.info("Sent outbound event for consumed event with id: {}", demoInboundEvent.id());
     }
 }
