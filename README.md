@@ -20,6 +20,13 @@ Build and test the Micronaut application, and then run, with:
 ./gradlew run
 ```
 
+Alternatively, following tests, build a native executable with GraalVM (version 21) - [install instructions](https://www.graalvm.org/latest/docs/getting-started/) - and then run the executable:
+```
+./gradlew clean test
+./gradlew nativeCompile
+./gradlew nativeRun
+```
+
 Check application health:
 ```
 curl localhost:9001/health
@@ -59,6 +66,12 @@ First ensure the Project module paths are set to `Inherit project compile output
 ```
 ./gradlew clean build
 docker build -t ct/micronaut-kafka-java:latest .
+```
+
+Alternatively, build a native executable with GraalVM, followed by the Docker container:
+```
+./gradlew clean nativeCompile
+./gradlew dockerBuildNative
 ```
 
 Run component tests:

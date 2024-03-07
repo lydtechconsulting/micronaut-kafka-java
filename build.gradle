@@ -66,6 +66,7 @@ tasks {
     dockerfileNative {
         baseImage('ghcr.io/graalvm/native-image-community:21')
         jdkVersion.set('21')
+        args("-Dmicronaut.config.files=file:/application.yml")
     }
     dockerBuildNative {
         images = ["ct/micronaut-kafka-java"]
