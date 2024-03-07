@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class ItemServiceTest {
 
-    private ItemService service;
+    private DemoService service;
 
     @BeforeEach
     public void setUp() {
-        service = new ItemService();
+        service = new DemoService();
     }
 
 }
