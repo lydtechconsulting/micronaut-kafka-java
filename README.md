@@ -1,4 +1,4 @@
-# Micronaut & Java Demo integrating with Kafka
+# Micronaut & Java Demo Integrating With Kafka
 
 Demo Micronaut application written in Java that integrates with Kafka.  The application consumes events from an inbound topic, and emits an outbound event for each.
 
