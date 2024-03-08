@@ -1,4 +1,4 @@
-package demo.handler;
+package demo.consumer;
 
 import demo.event.DemoInboundEvent;
 import demo.service.DemoService;
