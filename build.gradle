@@ -36,7 +36,6 @@ dependencies {
     testImplementation("org.apache.kafka:kafka_2.12:3.7.0:test")
 }
 
-
 application {
     mainClass.set("demo.DemoApplication")
 }

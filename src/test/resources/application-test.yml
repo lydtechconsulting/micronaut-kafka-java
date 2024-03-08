@@ -1,7 +1,0 @@
-micronaut:
-    server:
-        port: -1
-
-kafka:
-    bootstrap:
-        servers: localhost:${random.port}

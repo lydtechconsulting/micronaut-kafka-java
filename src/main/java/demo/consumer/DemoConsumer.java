@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@KafkaListener(groupId = "demo-group=id")
+@KafkaListener(groupId = "demo-group-id")
 public class DemoConsumer {
 
     @Inject

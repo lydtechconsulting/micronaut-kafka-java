@@ -3,6 +3,7 @@ package demo.component;
 import java.util.List;
 import java.util.UUID;
 
+import demo.event.DemoInboundEvent;
 import dev.lydtech.component.framework.client.kafka.KafkaClient;
 import dev.lydtech.component.framework.extension.ComponentTestExtension;
 import dev.lydtech.component.framework.mapper.JsonMapper;
@@ -14,8 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static demo.util.TestEventData.INBOUND_DATA;
-import static demo.util.TestEventData.buildDemoInboundEvent;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
@@ -44,11 +43,10 @@ public class EndToEndCT {
     public void testFlow() throws Exception {
         int totalMessages = 100;
         for (int i=0; i<totalMessages; i++) {
-            String key = UUID.randomUUID().toString();
-            String payload = UUID.randomUUID().toString();
-            KafkaClient.getInstance().sendMessage("demo-inbound-topic", key, JsonMapper.writeToJson(buildDemoInboundEvent(payload)));
+            String id = UUID.randomUUID().toString();
+            KafkaClient.getInstance().sendMessage("demo-inbound-topic", null, JsonMapper.writeToJson(new DemoInboundEvent(id, "Test data")));
         }
         List<ConsumerRecord<String, String>> outboundEvents = KafkaClient.getInstance().consumeAndAssert("testFlow", consumer, totalMessages, 3);
-        outboundEvents.stream().forEach(outboundEvent -> assertThat(outboundEvent.value(), containsString(INBOUND_DATA)));
+        outboundEvents.stream().forEach(outboundEvent -> assertThat(outboundEvent.value(), containsString("Test data")));
     }
 }
